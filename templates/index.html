@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat on Golang</title>
+</head>
+<body>
+<section class="wrap">
+    <input id="input" type="text"/>
+    <button onclick="send()">Send</button>
+    <div>
+        Статус: <span class="status"></span>
+    </div>
+    <h3>Чат: </h3>
+    <pre id="output"></pre>
+</section>
+
+<script>
+    let input = document.getElementById("input");
+    let output = document.getElementById("output");
+    let status = document.querySelector(".status");
+    status.style.color = "#04aa04"
+
+    let socket = new WebSocket("ws://localhost:8080/ws");
+
+    socket.onopen = function () {
+        status.innerHTML += "Подключен\n";
+    };
+
+    socket.onmessage = function (e) {
+        output.innerHTML += "Сообщение: " + e.data + "\n";
+    };
+
+    function send() {
+        socket.send(input.value);
+        input.value = "";
+    }
+
+</script>
+</body>
+</html>
